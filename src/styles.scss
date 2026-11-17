@@ -1,1 +1,105 @@
-/* You can add global styles to this file, and also import other style files */
+// Global design tokens. Colors are chosen for WCAG AA contrast on white.
+:root {
+  --color-primary: #0b5394;
+  --color-text: #1f2328;
+  --color-muted: #545d68;
+  --color-border: #8c959f;
+  --color-error: #b3261e;
+  --color-surface: #f6f8fa;
+  --color-focus: #0b5394;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color: var(--color-text);
+  line-height: 1.5;
+}
+
+body {
+  margin: 0;
+  background: #fff;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+button {
+  font: inherit;
+  padding: 0.4rem 0.9rem;
+  border: 1px solid var(--color-primary);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--color-primary);
+  cursor: pointer;
+
+  &.primary {
+    background: var(--color-primary);
+    color: #fff;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+// Shared field layout used by all widgets.
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+
+  label {
+    font-weight: 600;
+  }
+
+  input,
+  select,
+  textarea {
+    font: inherit;
+    padding: 0.4rem 0.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    background: #fff;
+    color: var(--color-text);
+  }
+
+  input[readonly] {
+    background: var(--color-surface);
+  }
+
+  [aria-invalid='true'] {
+    border-color: var(--color-error);
+  }
+}
+
+.field-error {
+  color: var(--color-error);
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.field-hint {
+  color: var(--color-muted);
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.required-marker {
+  color: var(--color-error);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
