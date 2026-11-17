@@ -1,19 +1,7 @@
 import { err, ok, Result } from './result';
 
 export type Operator =
-  | '=='
-  | '!='
-  | '<'
-  | '<='
-  | '>'
-  | '>='
-  | '&&'
-  | '||'
-  | '!'
-  | '+'
-  | '-'
-  | '*'
-  | '/';
+  '==' | '!=' | '<' | '<=' | '>' | '>=' | '&&' | '||' | '!' | '+' | '-' | '*' | '/';
 
 export type Token =
   | { readonly type: 'number'; readonly value: number; readonly pos: number }
