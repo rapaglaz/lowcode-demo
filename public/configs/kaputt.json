@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 3,
+  "id": "kaputt",
+  "title": "",
+  "root": {
+    "id": "root",
+    "type": "section",
+    "children": [
+      { "id": "amount", "type": "number-field", "validators": { "min": 10, "max": 1 } },
+      { "id": "amount", "type": "text-field", "visibleIf": "amount >" },
+      { "id": "status", "type": "select-field" },
+      { "id": "note", "type": "text-field", "requiredIf": "missingField == 'x'" }
+    ]
+  }
+}

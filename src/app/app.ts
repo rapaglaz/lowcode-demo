@@ -69,6 +69,7 @@ export class App {
     { path: '/run/zaehlerstand', label: 'Zählerstand', testId: 'zaehlerstand' },
     { path: '/run/abschlag', label: 'Abschlag', testId: 'abschlag' },
     { path: '/run/beschwerde', label: 'Beschwerde', testId: 'beschwerde' },
+    { path: '/run/kaputt', label: 'Defekte Config', testId: 'kaputt' },
     { path: '/builder', label: 'Builder', testId: 'builder' },
     { path: '/signal-forms', label: 'Signal Forms', testId: 'signal-forms' },
   ] as const;

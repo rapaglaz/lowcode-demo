@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 3,
+  "id": "abschlag",
+  "title": "Abschlag ändern",
+  "description": "Änderung des monatlichen Abschlags. Bei einer Erhöhung um mehr als 50 EUR ist eine Begründung nötig.",
+  "root": {
+    "id": "root",
+    "type": "section",
+    "children": [
+      {
+        "id": "customerNumber",
+        "type": "text-field",
+        "props": {
+          "label": "Kundennummer",
+          "hint": "Acht Ziffern.",
+          "patternMessage": "Die Kundennummer besteht aus acht Ziffern."
+        },
+        "validators": { "required": true, "pattern": "^[0-9]{8}$" }
+      },
+      {
+        "id": "currentInstalment",
+        "type": "number-field",
+        "props": { "label": "Aktueller Abschlag in EUR", "readOnly": true, "defaultValue": 85 }
+      },
+      {
+        "id": "newInstalment",
+        "type": "number-field",
+        "props": { "label": "Neuer Abschlag in EUR" },
+        "validators": { "required": true, "min": 10, "max": 1000 }
+      },
+      {
+        "id": "difference",
+        "type": "number-field",
+        "props": { "label": "Differenz in EUR", "hint": "Wird automatisch berechnet." },
+        "computed": "newInstalment - currentInstalment"
+      },
+      {
+        "id": "reason",
+        "type": "textarea-field",
+        "props": { "label": "Begründung", "rows": 3 },
+        "requiredIf": "difference > 50"
+      }
+    ]
+  }
+}

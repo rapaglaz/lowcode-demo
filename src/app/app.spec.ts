@@ -8,6 +8,6 @@ describe('App', () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
     const nav = (fixture.nativeElement as HTMLElement).querySelector('nav');
-    expect(nav?.querySelectorAll('a').length).toBe(5);
+    expect(nav?.querySelectorAll('a').length).toBe(6);
   });
 });

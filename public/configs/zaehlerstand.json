@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "id": "zaehlerstand",
+  "title": "Zählerstand erfassen",
+  "fields": [
+    {
+      "name": "meterNumber",
+      "widget": "text",
+      "label": "Zählernummer",
+      "hint": "Ein bis drei Großbuchstaben, danach 6 bis 10 Ziffern, z. B. EMH12345678.",
+      "required": true,
+      "pattern": "^[A-Z]{1,3}[0-9]{6,10}$"
+    },
+    {
+      "name": "readingType",
+      "widget": "select",
+      "label": "Ablesung durch",
+      "required": true,
+      "options": ["Kunde", "Monteur"]
+    },
+    {
+      "name": "photo",
+      "widget": "upload",
+      "label": "Foto des Zählers",
+      "required": true,
+      "showIf": "readingType == 'Monteur'"
+    },
+    {
+      "name": "readingDate",
+      "widget": "date",
+      "label": "Ablesedatum",
+      "required": true
+    },
+    {
+      "name": "reading",
+      "widget": "number",
+      "label": "Zählerstand in kWh",
+      "required": true,
+      "min": 0
+    }
+  ]
+}

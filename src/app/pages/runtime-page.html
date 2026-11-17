@@ -1,0 +1,77 @@
+@if (config.isLoading()) {
+  <p role="status" data-testid="loading">Konfiguration wird geladen …</p>
+} @else if (issues(); as issues) {
+  <h1>Bildschirm „{{ id() }}“</h1>
+  <mm-config-error-panel [issues]="issues" />
+} @else if (loaded(); as loaded) {
+  <h1 data-testid="screen-title">{{ loaded.config.title }}</h1>
+  @if (loaded.config.description; as description) {
+    <p class="description">{{ description }}</p>
+  }
+  @if (loaded.migratedFrom !== null) {
+    <p class="notice" data-testid="migration-notice">
+      This configuration uses schema v{{ loaded.migratedFrom }} and was migrated to v3 on load.
+    </p>
+  }
+
+  <div class="toolbar" role="group" aria-label="Renderer options">
+    <label>
+      <input
+        #imperative
+        type="checkbox"
+        data-testid="toggle-imperative"
+        [checked]="mode() === 'imperative'"
+        (change)="toggleMode(imperative.checked)"
+      />
+      Imperative renderer (createComponent)
+    </label>
+    <label>
+      <input
+        #readOnlyToggle
+        type="checkbox"
+        data-testid="toggle-readonly"
+        [checked]="readOnly()"
+        (change)="readOnly.set(readOnlyToggle.checked)"
+      />
+      Read-only
+    </label>
+  </div>
+
+  <form novalidate [attr.aria-label]="loaded.config.title" (submit)="save($event)">
+    <mm-screen [config]="loaded.config" [readOnly]="readOnly()" />
+
+    <div class="actions">
+      <button
+        type="submit"
+        class="primary"
+        data-testid="save"
+        [disabled]="readOnly() || saveState().kind === 'saving'"
+      >
+        Speichern
+      </button>
+    </div>
+  </form>
+
+  <div class="save-status" role="status" data-testid="save-status">
+    @switch (saveState().kind) {
+      @case ('invalid') {
+        <p class="field-error">Bitte korrigieren Sie die markierten Felder.</p>
+      }
+      @case ('saving') {
+        <p>Wird gespeichert …</p>
+      }
+      @case ('saved') {
+        <p>Gespeichert.</p>
+      }
+    }
+  </div>
+
+  @if (saveState(); as state) {
+    @if (state.kind === 'saved') {
+      <details open>
+        <summary>Gespeicherte Daten (#{{ state.submission.id }})</summary>
+        <pre data-testid="saved-payload">{{ state.submission.value | json }}</pre>
+      </details>
+    }
+  }
+}

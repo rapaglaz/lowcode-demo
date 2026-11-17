@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 3,
+  "id": "beschwerde",
+  "title": "Beschwerde erfassen",
+  "root": {
+    "id": "root",
+    "type": "section",
+    "children": [
+      {
+        "id": "customer",
+        "type": "section",
+        "props": { "label": "Kunde" },
+        "children": [
+          {
+            "id": "customerNumber",
+            "type": "text-field",
+            "props": {
+              "label": "Kundennummer",
+              "patternMessage": "Die Kundennummer besteht aus acht Ziffern."
+            },
+            "validators": { "required": true, "pattern": "^[0-9]{8}$" }
+          },
+          {
+            "id": "name",
+            "type": "text-field",
+            "props": { "label": "Name" },
+            "validators": { "required": true }
+          }
+        ]
+      },
+      {
+        "id": "complaint",
+        "type": "section",
+        "props": { "label": "Beschwerde" },
+        "children": [
+          {
+            "id": "category",
+            "type": "select-field",
+            "props": {
+              "label": "Kategorie",
+              "options": [
+                { "value": "abrechnung", "label": "Abrechnung" },
+                { "value": "zaehler", "label": "Zähler" },
+                { "value": "service", "label": "Service" }
+              ]
+            },
+            "validators": { "required": true }
+          },
+          {
+            "id": "priority",
+            "type": "select-field",
+            "props": {
+              "label": "Priorität",
+              "defaultValue": "mittel",
+              "options": [
+                { "value": "niedrig", "label": "Niedrig" },
+                { "value": "mittel", "label": "Mittel" },
+                { "value": "hoch", "label": "Hoch" }
+              ]
+            },
+            "validators": { "required": true }
+          },
+          {
+            "id": "description",
+            "type": "textarea-field",
+            "props": { "label": "Beschreibung", "rows": 4 },
+            "validators": { "required": true }
+          },
+          {
+            "id": "details",
+            "type": "section",
+            "props": { "label": "Details zum Vorfall" },
+            "children": [
+              {
+                "id": "incidentDate",
+                "type": "date-field",
+                "props": { "label": "Datum des Vorfalls" }
+              },
+              {
+                "id": "meterNumber",
+                "type": "text-field",
+                "props": { "label": "Betroffene Zählernummer" }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "contactAttempts",
+        "type": "repeat-list",
+        "props": {
+          "label": "Kontaktversuche",
+          "itemLabel": "Kontaktversuch",
+          "addLabel": "Kontaktversuch hinzufügen",
+          "minItems": 1
+        },
+        "children": [
+          {
+            "id": "channel",
+            "type": "select-field",
+            "props": {
+              "label": "Kanal",
+              "options": [
+                { "value": "telefon", "label": "Telefon" },
+                { "value": "email", "label": "E-Mail" },
+                { "value": "brief", "label": "Brief" }
+              ]
+            },
+            "validators": { "required": true }
+          },
+          {
+            "id": "contactDate",
+            "type": "date-field",
+            "props": { "label": "Datum" },
+            "validators": { "required": true }
+          },
+          {
+            "id": "result",
+            "type": "select-field",
+            "props": {
+              "label": "Ergebnis",
+              "options": [
+                { "value": "erreicht", "label": "Erreicht" },
+                { "value": "nicht_erreicht", "label": "Nicht erreicht" },
+                { "value": "rueckruf", "label": "Rückruf vereinbart" }
+              ]
+            }
+          },
+          {
+            "id": "callbackDate",
+            "type": "date-field",
+            "props": { "label": "Rückruf am" },
+            "visibleIf": "item.result == 'rueckruf'",
+            "requiredIf": "item.result == 'rueckruf'"
+          }
+        ]
+      },
+      {
+        "id": "escalation",
+        "type": "section",
+        "props": { "label": "Eskalation", "hint": "Pflicht bei hoher Priorität." },
+        "visibleIf": "complaint.priority == 'hoch'",
+        "children": [
+          {
+            "id": "team",
+            "type": "select-field",
+            "props": {
+              "label": "Zuständiges Team",
+              "options": [
+                { "value": "teamleitung", "label": "Teamleitung" },
+                { "value": "beschwerdemanagement", "label": "Beschwerdemanagement" }
+              ]
+            },
+            "validators": { "required": true }
+          },
+          {
+            "id": "justification",
+            "type": "textarea-field",
+            "props": { "label": "Begründung der Eskalation", "rows": 3 },
+            "validators": { "required": true }
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -3,6 +3,7 @@ export type V1Field = {
   readonly name: string;
   readonly widget: string;
   readonly label?: string;
+  readonly hint?: string;
   readonly required?: boolean;
   readonly pattern?: string;
   readonly min?: number;
