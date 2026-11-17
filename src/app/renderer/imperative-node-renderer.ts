@@ -1,6 +1,7 @@
 import {
   Component,
   ComponentRef,
+  computed,
   DestroyRef,
   effect,
   inject,
@@ -13,7 +14,7 @@ import {
 } from '@angular/core';
 import { UiNode } from '../core/config.types';
 import { createChildContext } from './child-context';
-import { NODE_CONTEXT } from './node-context';
+import { domId, NODE_CONTEXT } from './node-context';
 import { resolveWidget, UI_REGISTRY } from './ui-registry';
 
 /**
@@ -23,7 +24,11 @@ import { resolveWidget, UI_REGISTRY } from './ui-registry';
  */
 @Component({
   selector: 'mm-node-imperative',
-  host: { '[attr.data-node-id]': 'node().id', style: 'display: block' },
+  host: {
+    '[attr.data-node-id]': 'node().id',
+    '[attr.data-testid]': "'node-' + testId()",
+    style: 'display: block',
+  },
   // The anchor keeps created widgets inside this element instead of next to it.
   template: '<ng-container #outlet />',
 })
@@ -41,6 +46,8 @@ export class ImperativeNodeRenderer {
     params: () => this.node().type,
     loader: ({ params: type }) => resolveWidget(this.registry, type)(),
   });
+
+  protected readonly testId = computed(() => domId(this.context.path()));
 
   private componentRef: ComponentRef<unknown> | null = null;
 

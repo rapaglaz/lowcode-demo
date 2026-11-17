@@ -13,7 +13,7 @@ import { DEFERRED_WIDGETS, resolveWidget, UI_REGISTRY } from './ui-registry';
 @Component({
   selector: 'mm-node',
   imports: [NgComponentOutlet],
-  host: { '[attr.data-node-id]': 'node().id' },
+  host: { '[attr.data-node-id]': 'node().id', '[attr.data-testid]': "'node-' + testId()" },
   template: `
     @if (context.state().visible) {
       @if (widget.value(); as component) {
