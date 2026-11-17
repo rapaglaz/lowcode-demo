@@ -1,0 +1,109 @@
+<h1>Signal Forms: Abschlag ändern</h1>
+<p class="intro">
+  The same screen as <a routerLink="/run/abschlag">/run/abschlag</a>, written by hand with
+  <code>&#64;angular/forms/signals</code>. Compare the schema function in
+  <code>signal-forms-page.ts</code> with <code>public/configs/abschlag.json</code>.
+</p>
+
+<form [formRoot]="form" aria-label="Abschlag ändern (Signal Forms)">
+  @let customer = form.customerNumber();
+  <div class="field">
+    <label for="sf-customerNumber"
+      >Kundennummer <span class="required-marker" aria-hidden="true">*</span></label
+    >
+    <input
+      id="sf-customerNumber"
+      data-testid="sf-customerNumber"
+      [formField]="form.customerNumber"
+      [attr.aria-invalid]="customer.touched() && customer.invalid()"
+      [attr.aria-describedby]="
+        customer.touched() && customer.invalid() ? 'sf-customerNumber-error' : null
+      "
+    />
+    @if (customer.touched() && customer.invalid()) {
+      <div id="sf-customerNumber-error" data-testid="sf-error-customerNumber">
+        @for (message of messages(customer.errors()); track message) {
+          <p class="field-error">{{ message }}</p>
+        }
+      </div>
+    }
+  </div>
+
+  <div class="field">
+    <label for="sf-currentInstalment">Aktueller Abschlag in EUR</label>
+    <input id="sf-currentInstalment" type="number" readonly [value]="model().currentInstalment" />
+  </div>
+
+  @let next = form.newInstalment();
+  <div class="field">
+    <label for="sf-newInstalment"
+      >Neuer Abschlag in EUR <span class="required-marker" aria-hidden="true">*</span></label
+    >
+    <input
+      id="sf-newInstalment"
+      type="number"
+      data-testid="sf-newInstalment"
+      [formField]="form.newInstalment"
+      [attr.aria-invalid]="next.touched() && next.invalid()"
+      [attr.aria-describedby]="next.touched() && next.invalid() ? 'sf-newInstalment-error' : null"
+    />
+    @if (next.touched() && next.invalid()) {
+      <div id="sf-newInstalment-error" data-testid="sf-error-newInstalment">
+        @for (message of messages(next.errors()); track message) {
+          <p class="field-error">{{ message }}</p>
+        }
+      </div>
+    }
+  </div>
+
+  <div class="field">
+    <label for="sf-difference">Differenz in EUR</label>
+    <input
+      id="sf-difference"
+      type="number"
+      readonly
+      aria-live="polite"
+      data-testid="sf-difference"
+      [value]="difference() ?? ''"
+    />
+  </div>
+
+  @let reason = form.reason();
+  <div class="field">
+    <label for="sf-reason"
+      >Begründung
+      @if (reason.required()) {
+        <span class="required-marker" aria-hidden="true">*</span>
+      }
+    </label>
+    <textarea
+      id="sf-reason"
+      rows="3"
+      data-testid="sf-reason"
+      [formField]="form.reason"
+      [attr.aria-invalid]="reason.touched() && reason.invalid()"
+      [attr.aria-describedby]="reason.touched() && reason.invalid() ? 'sf-reason-error' : null"
+    ></textarea>
+    @if (reason.touched() && reason.invalid()) {
+      <div id="sf-reason-error" data-testid="sf-error-reason">
+        @for (message of messages(reason.errors()); track message) {
+          <p class="field-error">{{ message }}</p>
+        }
+      </div>
+    }
+  </div>
+
+  <div class="actions">
+    <button type="submit" class="primary" data-testid="sf-save" [disabled]="form().submitting()">
+      Speichern
+    </button>
+    <button type="button" (click)="reset()">Zurücksetzen</button>
+  </div>
+</form>
+
+<div role="status" data-testid="sf-status">
+  @if (saved(); as value) {
+    <p>Gespeichert.</p>
+    <pre>{{ value | json }}</pre>
+  }
+</div>

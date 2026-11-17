@@ -13,5 +13,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/builder-page').then((m) => m.BuilderPage),
     title: 'Builder',
   },
+  {
+    path: 'signal-forms',
+    loadComponent: () => import('./pages/signal-forms-page').then((m) => m.SignalFormsPage),
+    title: 'Signal Forms',
+  },
   { path: '**', redirectTo: 'run/zaehlerstand' },
 ];
