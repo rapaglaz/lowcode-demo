@@ -1,0 +1,30 @@
+.meta {
+  margin-top: 0;
+}
+
+fieldset {
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  margin: 0 0 1rem;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.inline {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.mono {
+  font-family: ui-monospace, monospace;
+}
+
+.empty {
+  color: var(--color-muted);
+}

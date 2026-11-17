@@ -1,0 +1,83 @@
+<h1>Builder</h1>
+
+<div class="toolbar" role="toolbar" aria-label="Builder actions">
+  <button
+    type="button"
+    data-testid="undo"
+    [disabled]="!store.canUndo()"
+    [attr.title]="store.undoLabel()"
+    (click)="store.undo()"
+  >
+    Undo
+  </button>
+  <button
+    type="button"
+    data-testid="redo"
+    [disabled]="!store.canRedo()"
+    [attr.title]="store.redoLabel()"
+    (click)="store.redo()"
+  >
+    Redo
+  </button>
+
+  <label for="sample-select">Load sample</label>
+  <select #sample id="sample-select" data-testid="sample-select">
+    @for (id of samples; track id) {
+      <option [value]="id">{{ id }}</option>
+    }
+  </select>
+  <button type="button" data-testid="load-sample" (click)="loadSample(sample.value)">Load</button>
+
+  <button
+    type="button"
+    class="primary"
+    data-testid="run"
+    [disabled]="!previewConfig()"
+    (click)="run()"
+  >
+    Save and run
+  </button>
+</div>
+
+<div class="header-fields">
+  <div class="field">
+    <label for="screen-title">Screen title</label>
+    <input
+      #title
+      id="screen-title"
+      data-testid="screen-title-input"
+      [value]="store.config().title"
+      (change)="setTitle(title.value)"
+    />
+  </div>
+  <div class="field">
+    <label for="screen-id">Screen id</label>
+    <input
+      #screenId
+      id="screen-id"
+      aria-describedby="screen-id-hint"
+      [value]="store.config().id"
+      (change)="setScreenId(screenId.value)"
+    />
+    <p class="field-hint" id="screen-id-hint">Lowercase letters, digits, '-' and '_'.</p>
+  </div>
+</div>
+
+<div class="editor" cdkDropListGroup>
+  <section class="column" aria-label="Palette"><mm-palette /></section>
+  <section class="column" aria-label="Canvas"><mm-canvas /></section>
+  <section class="column" aria-label="Properties"><mm-property-panel /></section>
+</div>
+
+<div class="output">
+  <section aria-labelledby="preview-title" data-testid="preview">
+    <h2 id="preview-title">Preview</h2>
+    @if (previewConfig(); as config) {
+      <h3>{{ config.title }}</h3>
+      <mm-screen [config]="config" />
+    } @else if (previewIssues(); as issues) {
+      <mm-config-error-panel [issues]="issues" />
+    }
+  </section>
+  <section aria-label="JSON"><mm-json-view /></section>
+</div>

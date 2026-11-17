@@ -1,0 +1,130 @@
+<h2 id="properties-title">Properties</h2>
+@for (node of selection(); track node.id) {
+  <form class="panel" aria-labelledby="properties-title" (submit)="$event.preventDefault()">
+    <p class="meta">
+      <code data-testid="prop-id">{{ node.id }}</code> · <code>{{ node.type }}</code>
+    </p>
+
+    <div class="field">
+      <label for="prop-label">Label</label>
+      <input
+        #label
+        id="prop-label"
+        data-testid="prop-label"
+        [value]="node.props?.label ?? ''"
+        (change)="setText(node, 'label', label.value)"
+      />
+    </div>
+    <div class="field">
+      <label for="prop-hint">Hint</label>
+      <input
+        #hint
+        id="prop-hint"
+        data-testid="prop-hint"
+        [value]="node.props?.hint ?? ''"
+        (change)="setText(node, 'hint', hint.value)"
+      />
+    </div>
+
+    @if (!isContainer(node)) {
+      <div class="field">
+        <label for="prop-placeholder">Placeholder</label>
+        <input
+          #placeholder
+          id="prop-placeholder"
+          [value]="node.props?.placeholder ?? ''"
+          (change)="setText(node, 'placeholder', placeholder.value)"
+        />
+      </div>
+
+      @if (node.type === 'select-field') {
+        <div class="field">
+          <label for="prop-options">Options</label>
+          <textarea
+            #options
+            id="prop-options"
+            rows="4"
+            aria-describedby="prop-options-hint"
+            [value]="optionsText(node)"
+            (change)="setOptions(node, options.value)"
+          ></textarea>
+          <p class="field-hint" id="prop-options-hint">One option per line: value=Label</p>
+        </div>
+      }
+
+      <fieldset>
+        <legend>Validators</legend>
+        <label class="inline">
+          <input
+            #required
+            type="checkbox"
+            data-testid="prop-required"
+            [checked]="node.validators?.required === true"
+            (change)="setRequired(node, required.checked)"
+          />
+          Required
+        </label>
+        <div class="row">
+          <div class="field">
+            <label for="prop-min">Min</label>
+            <input
+              #min
+              id="prop-min"
+              type="number"
+              [value]="node.validators?.min ?? ''"
+              (change)="setNumberValidator(node, 'min', min.value)"
+            />
+          </div>
+          <div class="field">
+            <label for="prop-max">Max</label>
+            <input
+              #max
+              id="prop-max"
+              type="number"
+              [value]="node.validators?.max ?? ''"
+              (change)="setNumberValidator(node, 'max', max.value)"
+            />
+          </div>
+        </div>
+        <div class="field">
+          <label for="prop-pattern">Pattern (RegExp)</label>
+          <input
+            #pattern
+            id="prop-pattern"
+            [value]="node.validators?.pattern ?? ''"
+            (change)="setPattern(node, pattern.value)"
+          />
+        </div>
+      </fieldset>
+    }
+
+    <fieldset>
+      <legend>Expressions</legend>
+      @for (key of expressionKeys; track key) {
+        @if (key !== 'computed' || !isContainer(node)) {
+          <div class="field">
+            <label [for]="'prop-' + key">{{ key }}</label>
+            <input
+              #expression
+              class="mono"
+              [id]="'prop-' + key"
+              [attr.data-testid]="'prop-' + key"
+              [value]="node[key] ?? ''"
+              [attr.aria-invalid]="draftErrors()[key] ? true : null"
+              [attr.aria-describedby]="draftErrors()[key] ? 'prop-' + key + '-error' : null"
+              (input)="checkExpression(key, expression.value)"
+              (change)="setExpression(node, key, expression.value)"
+            />
+            @if (draftErrors()[key]; as error) {
+              <p class="field-error" [id]="'prop-' + key + '-error'">{{ error }}</p>
+            }
+          </div>
+        }
+      }
+    </fieldset>
+
+    <button type="button" data-testid="prop-remove" (click)="remove(node)">Remove node</button>
+  </form>
+} @empty {
+  <p class="empty">Select a node on the canvas to edit its properties.</p>
+}

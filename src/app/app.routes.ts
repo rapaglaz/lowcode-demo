@@ -8,5 +8,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/runtime-page').then((m) => m.RuntimePage),
     title: 'Formular',
   },
+  {
+    path: 'builder',
+    loadComponent: () => import('./pages/builder-page').then((m) => m.BuilderPage),
+    title: 'Builder',
+  },
   { path: '**', redirectTo: 'run/zaehlerstand' },
 ];
